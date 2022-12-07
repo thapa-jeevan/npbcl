@@ -1,7 +1,7 @@
-### !/bin/sh
+# !/bin/sh
 rm -r cache
 rm -r saves
-### Discriminative Experiments
+# Discriminative Experiments
 # not MNIST
 echo "Training Cifar100"
 python3 npbcl_cifar100.py

@@ -1,7 +1,5 @@
-import math
 import torch
 from torch.optim.optimizer import Optimizer
-
 
 
 class Adam(Optimizer):
@@ -39,7 +37,7 @@ class Adam(Optimizer):
             for p in group['params']:
                 if p.grad is None:
                     continue
-                grad = p.grad.data#.clamp(-10,10)
+                grad = p.grad.data  # .clamp(-10,10)
                 if grad.is_sparse:
                     raise RuntimeError('Adam does not support sparse gradients, please consider SparseAdam instead')
                 amsgrad = group['amsgrad']
@@ -62,8 +60,8 @@ class Adam(Optimizer):
                     max_exp_avg_sq = state['max_exp_avg_sq']
                 beta1, beta2 = group['betas']
 
-                val = (grad!=0).float()
-                state['step'] += 1# val
+                val = (grad != 0).float()
+                state['step'] += 1  # val
 
                 if group['weight_decay'] != 0:
                     grad.add_(group['weight_decay'], p.data)
@@ -83,8 +81,6 @@ class Adam(Optimizer):
                 bias_correction2 = 1 - beta2 ** state['step']
                 step_size = group['lr'] * (bias_correction2.pow(0.5)) / bias_correction1
 
-                p.data += -step_size*(exp_avg.div(denom))
+                p.data += -step_size * (exp_avg.div(denom))
 
         return loss
-
-    

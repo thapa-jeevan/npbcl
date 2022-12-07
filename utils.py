@@ -26,4 +26,4 @@ def truncated_normal(uniform):
 
 
 def sample_truncated_normal(shape=()):
-    return truncted_normal(torch.from_numpy(np.random.uniform(0, 1, shape)))
+    return truncated_normal(torch.from_numpy(np.random.uniform(0, 1, shape)))
