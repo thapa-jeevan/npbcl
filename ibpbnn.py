@@ -80,11 +80,8 @@ class IBP_BNN(nn.Module):
         # All the previously learned tasks boolean masks are to be stored.
         self.prev_masks = nn.ParameterList([])
         for l in range(self.no_layers - 1):
-            prev_mask_l_init = torch.tensor(prev_masks[l]) if prev_masks is not None else torch.zeros(max_tasks,
-                                                                                                      self.W_m[l].shape[
-                                                                                                          0],
-                                                                                                      self.W_m[l].shape[
-                                                                                                          1]).float()
+            prev_mask_l_init = torch.tensor(np.array(prev_masks[l])) if prev_masks is not None else torch.zeros(
+                max_tasks, self.W_m[l].shape[0], self.W_m[l].shape[1]).float()
             self.prev_masks.append(nn.Parameter(prev_mask_l_init, requires_grad=False))
 
         # Initializing the session and optimizer for current model. 
@@ -708,7 +705,7 @@ class IBP_BNN(nn.Module):
                 else:
                     m, v = self.W_m[i], self.W_v[i]  # Taking Means and logVariaces of parameters
                 m0, v0 = (self.prior_W_m[i].to(self.device) * kl_mask), (self.prior_W_v[i].to(self.device) * kl_mask + (
-                            1.0 * (1 - kl_mask) * self.prior_var.to(self.device)))  # Prior mean and variance
+                        1.0 * (1 - kl_mask) * self.prior_var.to(self.device)))  # Prior mean and variance
             except:
                 print(din, dout, din_old, dout_old, self.W_m[i].shape)
             # print(v,v0)
@@ -724,7 +721,7 @@ class IBP_BNN(nn.Module):
             else:
                 m, v = self.b_m[i], self.b_v[i]
             m0, v0 = (self.prior_b_m[i].to(self.device) * kl_mask_b), (self.prior_b_v[i].to(self.device) * kl_mask_b + (
-                        1.0 * (1 - kl_mask_b) * self.prior_var.to(self.device)))
+                    1.0 * (1 - kl_mask_b) * self.prior_var.to(self.device)))
             const_term = -0.5 * dout
             log_std_diff = 0.5 * torch.sum((v0).log() - v)
             mu_diff_term = 0.5 * torch.sum((v.exp() + (m0 - m) ** 2) / (v0))

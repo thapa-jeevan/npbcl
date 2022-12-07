@@ -12,10 +12,10 @@ from os import path
 from urllib import request
 
 import numpy as np
-from keras.datasets import fashion_mnist
+# from keras.datasets import fashion_mnist
 from PIL import Image
 from sklearn.model_selection import train_test_split as tts
-from urllib3 import request
+from urllib import request
 
 filename = [
     ["training_images", "train-images-idx3-ubyte.gz"],
@@ -185,13 +185,13 @@ def run_all():
     tasks = (np.concatenate(train_x), np.concatenate(train_y), np.concatenate(test_x), np.concatenate(test_y))
     pickle.dump(tasks, open("notmnist.pkl", "wb"))
 
-    print('\nDownloading the fashionMNIST dataset')
-    # Downloading fashionMNIST
-    (train_X, train_Y), (test_X, test_Y) = fashion_mnist.load_data()
-    X = np.concatenate([train_X, test_X], axis=0)
-    Y = np.concatenate([train_Y, test_Y], axis=0)
-    train_X, test_X, train_Y, test_Y = tts(X, Y, test_size=0.28571, random_state=2, stratify=Y)
-    dataset = (train_X, train_Y, test_X, test_Y)
-    pickle.dump(dataset, open('fashionMnist.pkl', 'wb'))
+    # print('\nDownloading the fashionMNIST dataset')
+    # # Downloading fashionMNIST
+    # (train_X, train_Y), (test_X, test_Y) = fashion_mnist.load_data()
+    # X = np.concatenate([train_X, test_X], axis=0)
+    # Y = np.concatenate([train_Y, test_Y], axis=0)
+    # train_X, test_X, train_Y, test_Y = tts(X, Y, test_size=0.28571, random_state=2, stratify=Y)
+    # dataset = (train_X, train_Y, test_X, test_Y)
+    # pickle.dump(dataset, open('fashionMnist.pkl', 'wb'))
 
     os.chdir(cpath)
