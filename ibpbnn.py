@@ -264,19 +264,19 @@ class IBP_BNN(nn.Module):
 
     # Done 
     def extend_tensor(self, tensor, dims=None, extend_with=0.0):
-        if (dims is None):
+        if dims is None:
             return tensor
         else:
-            if (len(tensor.shape) != len(dims)):
+            if len(tensor.shape) != len(dims):
                 print(tensor.shape, dims)
                 assert 1 == 12
 
-            if (len(dims) == 1):
+            if len(dims) == 1:
                 temp = tensor.cpu().detach().numpy()
                 D = temp.shape[0]
                 new_array = np.zeros(dims[0] + D) + extend_with
                 new_array[:D] = temp
-            elif (len(dims) == 2):
+            elif len(dims) == 2:
                 temp = tensor.cpu().detach().numpy()
                 D1, D2 = temp.shape
                 new_array = np.zeros((D1 + dims[0], D2 + dims[1])) + extend_with
@@ -497,10 +497,10 @@ class IBP_BNN(nn.Module):
         output : N x [sample_size] x Dout
         """
 
-        if (layer < len(self.size) - 2):
+        if layer < len(self.size) - 2:
             params = [self.W_m[layer], self.W_v[layer], self.b_m[layer], self.b_v[layer]]
         else:
-            if (self.single_head):
+            if self.single_head:
                 params = [self.W_last_m[0], self.W_last_v[0],
                           self.b_last_m[0], self.b_last_v[0]]
             else:
@@ -508,7 +508,7 @@ class IBP_BNN(nn.Module):
                           self.b_last_m[task_id], self.b_last_v[task_id]]
 
         shape = input.shape
-        if (len(shape) == 2):
+        if len(shape) == 2:
             A, B = shape
             x = input.unsqueeze(1)
         else:
@@ -533,7 +533,7 @@ class IBP_BNN(nn.Module):
         _, din, dout = weights.shape
 
         # Sampling mask or bernoulli random varible
-        if (layer < len(self.size) - 2):
+        if layer < len(self.size) - 2:
             if const_mask:
                 with torch.no_grad():
                     bs = self.prev_masks[layer][task_id]
@@ -560,7 +560,7 @@ class IBP_BNN(nn.Module):
 
     # Done
     def _prediction_layer(self, x, task_id=-1, no_samples=1, const_mask=False, temp=0.1):
-        if (self.W_last_m[0].is_cuda):
+        if self.W_last_m[0].is_cuda:
             self.device = 'cuda'
 
         activations = self.acts
@@ -575,14 +575,14 @@ class IBP_BNN(nn.Module):
             else:
                 x = torch.mm(x, self.W_last_m[task_id]) + self.b_last_m[task_id] 
             '''
-            if (i < iterto - 1):
+            if i < iterto - 1:
                 x = self.Linear(x, layer=i, no_samples=no_samples, const_mask=const_mask, temp=temp, task_id=task_id)
 
-                if (activations is not None):
+                if activations is not None:
                     act = activations[i]
-                    if (act == 'linear'):
+                    if act == 'linear':
                         pass
-                    elif (act == 'relu'):
+                    elif act == 'relu':
                         x = self.relu(x)
                 else:
                     x = self.relu(x)
@@ -608,7 +608,7 @@ class IBP_BNN(nn.Module):
         dout = conc1.view(-1).shape[0]
         # print(samples.shape, K, din, dout)
         assert samples.shape == torch.Size([K, din, dout])
-        if (samples.mean() != samples.mean()):
+        if samples.mean() != samples.mean():
             print(conc1, conc2, _conc1, _conc2)
             assert 1 == 2
 
@@ -623,10 +623,10 @@ class IBP_BNN(nn.Module):
                                          din])  # Independently sampling current layer IBP posterior : K x din x dout
         pis = torch.cumprod(vs, dim=2)  # Calcuting Pi's using nu's (IBP prior log probabilities): K x din x dout
         method = 1
-        if (method == 0):
+        if method == 0:
             logit_post = self._p_bers[l].unsqueeze(0) + self.logit(
                 pis)  # Varaitonal posterior log_alpha: K x din x dout
-        elif (method == 1):
+        elif method == 1:
             logit_post = self._p_bers[l].unsqueeze(0) + torch.log(
                 pis + 10e-8)  # - torch.log(pis*(self._p_bers[l].unsqueeze(0).exp()-1)+1)
 
@@ -782,7 +782,7 @@ class IBP_BNN(nn.Module):
             b_kl2 = (self.log_gumb(tau_prior, logit_pis, log_sample))  # prior logprob samples : K x din x dout
             b_kl = (b_kl1 - b_kl2).mean(0).mean(0).sum()  # .div(b_kl1.shape[0])
 
-        if (b_kl != b_kl):
+        if b_kl != b_kl:
             print(vs, bs, logit_post)
             assert 1 == 2
 

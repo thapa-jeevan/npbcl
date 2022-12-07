@@ -90,7 +90,7 @@ class IBP_BCL:
         return var
 
     def get_scores(self, model, x_testsets, y_testsets, x_coresets, y_coresets, hidden_size,
-                   no_epochs, single_head, batch_size=None, kl_mask=None):
+                   no_epochs, single_head, task_id, batch_size=None, kl_mask=None):
         # Retrieving the current model parameters
         mf_model = model
         mf_weights, mf_variances = model.get_weights()
@@ -103,7 +103,7 @@ class IBP_BCL:
                 del mf_model
                 torch.cuda.empty_cache()
                 x_train, y_train = self.merge_coresets(x_coresets, y_coresets)
-                prev_pber = self.get_soft_logit(prev_masks, i)
+                prev_pber = self.get_soft_logit(prev_masks, task_id)
                 bsize = x_train.shape[0] if (batch_size is None) else batch_size
                 final_model = IBP_BNN(x_train.shape[1], hidden_size, y_train.shape[1], x_train.shape[0], self.max_tasks,
                                       prev_means=mf_weights, prev_log_variances=mf_variances,
@@ -232,12 +232,12 @@ class IBP_BCL:
             mf_model.grow_net = False
 
             acc = self.get_scores(mf_model, x_testsets, y_testsets, x_coresets, y_coresets,
-                                  self.hidden_size, self.no_epochs, self.single_head, batch_size, kl_mask)
+                                  self.hidden_size, self.no_epochs, self.single_head, task_id, batch_size, kl_mask)
 
             torch.save(mf_model.state_dict(), "./saves/model_last_" + str(task_id))
             del mf_model
             torch.cuda.empty_cache()
-            all_acc = self.concatenate_results(acc, all_acc);
+            all_acc = self.concatenate_results(acc, all_acc)
             print(all_acc);
             print('*****')
 
