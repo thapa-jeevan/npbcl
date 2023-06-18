@@ -195,8 +195,8 @@ class IBP_BCL:
 
             # Calculating Union of all task masks and also for visualizing the layer wise network sparsity
             acc = self.get_scores(mf_model, x_testsets, y_testsets, x_coresets, y_coresets,
-                                  self.hidden_size, self.no_epochs, self.single_head, batch_size)
-
+                                  self.hidden_size, self.single_head, batch_size)
+            batch_size = None
             torch.save(mf_model.state_dict(), "./saves/model_last_" + str(task_id))
             del mf_model
             torch.cuda.empty_cache()
