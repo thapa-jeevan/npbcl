@@ -12,7 +12,7 @@ from os import path
 from urllib import request
 
 import numpy as np
-from keras.datasets import fashion_mnist
+# from keras.datasets import fashion_mnist
 from PIL import Image
 from sklearn.model_selection import train_test_split as tts
 from urllib3 import request
@@ -149,19 +149,19 @@ num_classes = 10
 
 def run_all():
     cpath = os.getcwd()
+    #
+    # try:
+    #     os.chdir(os.getcwd() + '/datasets')
+    # except:
+    # os.mkdir('datasets')
+    os.chdir(os.getcwd() + '/datasets')
 
-    try:
-        os.chdir(os.getcwd() + '/datasets')
-    except:
-        os.mkdir('datasets')
-        os.chdir(os.getcwd() + '/datasets')
-
-        print('Downloading the MNIST dataset...')
-        init()
-
-    print('\nDownloading the notMNIST dataset')
-    filename = maybe_download('notMNIST_small.tar.gz', 8458043)
-    folders = maybe_extract(filename)
+    # print('Downloading the MNIST dataset...')
+    # init()
+    #
+    # print('\nDownloading the notMNIST dataset')
+    # filename = maybe_download('notMNIST_small.tar.gz', 8458043)
+    # folders = maybe_extract(filename)
     names = os.listdir("notMNIST_small")
     tasks = []
     count = 0
@@ -185,13 +185,16 @@ def run_all():
     tasks = (np.concatenate(train_x), np.concatenate(train_y), np.concatenate(test_x), np.concatenate(test_y))
     pickle.dump(tasks, open("notmnist.pkl", "wb"))
 
-    print('\nDownloading the fashionMNIST dataset')
-    # Downloading fashionMNIST
-    (train_X, train_Y), (test_X, test_Y) = fashion_mnist.load_data()
-    X = np.concatenate([train_X, test_X], axis=0)
-    Y = np.concatenate([train_Y, test_Y], axis=0)
-    train_X, test_X, train_Y, test_Y = tts(X, Y, test_size=0.28571, random_state=2, stratify=Y)
-    dataset = (train_X, train_Y, test_X, test_Y)
-    pickle.dump(dataset, open('fashionMnist.pkl', 'wb'))
+    # print('\nDownloading the fashionMNIST dataset')
+    # # Downloading fashionMNIST
+    # (train_X, train_Y), (test_X, test_Y) = fashion_mnist.load_data()
+    # X = np.concatenate([train_X, test_X], axis=0)
+    # Y = np.concatenate([train_Y, test_Y], axis=0)
+    # train_X, test_X, train_Y, test_Y = tts(X, Y, test_size=0.28571, random_state=2, stratify=Y)
+    # dataset = (train_X, train_Y, test_X, test_Y)
+    # pickle.dump(dataset, open('fashionMnist.pkl', 'wb'))
 
     os.chdir(cpath)
+
+if __name__ == '__main__':
+    run_all()

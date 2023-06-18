@@ -31,7 +31,7 @@ class IBP_BAE(nn.Module):
         prior_variances : Initial prior variance.
         alpha : IBP concentration parameter.
         beta : IBP rate parameter.
-        prev_pber : (Not required) Used as a initialization for bernoulli probabilty for current task mask.
+        prev_pber : (Not required) Used as a initialization for bernoulli probability for current task mask.
         re_mode : Reparameterization (default is gumbel softmax)
         single_head : Weather to use task based seperate heads or single head for all the task.
         """

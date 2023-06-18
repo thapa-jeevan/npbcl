@@ -7,6 +7,8 @@ def parameterized_truncated_normal(uniform, mu, sigma, a, b):
 
     alpha = (a - mu) / sigma
     beta = (b - mu) / sigma
+    alpha = torch.Tensor([alpha])
+    beta = torch.Tensor([beta])
 
     alpha_normal_cdf = normal.cdf(alpha)
     p = alpha_normal_cdf + (normal.cdf(beta) - alpha_normal_cdf) * uniform

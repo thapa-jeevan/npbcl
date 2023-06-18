@@ -183,7 +183,7 @@ class IBP_BCL:
                 kl_mask = None
                 mf_weights = None
                 mf_variances = None
-            # Select coreset if coreset size is non zero
+            # Select coreset if coreset size is non-zero
             if self.coreset_size > 0:
                 x_coresets, y_coresets, x_train, y_train = self.coreset_method(x_coresets, y_coresets, x_train, y_train,
                                                                                self.coreset_size)

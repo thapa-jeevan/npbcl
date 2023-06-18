@@ -21,7 +21,7 @@ no_epochs = 5
 no_tasks = 5
 coreset_size = 0  # 200
 coreset_method = "kcen"
-single_head = False
+single_head = True
 batch_size = 256
 
 # data_gen = PermutedMnistGenerator(no_tasks)

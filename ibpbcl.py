@@ -5,6 +5,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+# from ibpbnn_wo_mask import IBP_BNN
 from ibpbnn import IBP_BNN
 
 # matplotlib.use('Agg')
