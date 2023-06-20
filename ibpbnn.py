@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from scipy.special import beta as BETA
@@ -427,7 +428,10 @@ class IBP_BNN(nn.Module):
 
         # Sampling mask or bernoulli random varible
         if (layer < len(self.size) - 2):
-            temp = temp[layer]
+            if not isinstance(temp, float):
+                temp = temp[layer]
+            else:
+                temp = torch.Tensor([temp]).to(self.device)
             vs, bs, logit_post = self.ibp_sample(layer, no_samples, temp=temp)  # Sampling through IBP
             self.KL_B.append(self._KL_B(layer, vs, bs, logit_post, temp=temp))
             # Generating masked weights and biases for current layer
@@ -593,9 +597,7 @@ class IBP_BNN(nn.Module):
 
     # Done
     def _KL_B(self, l, vs, bs, logit_post, temp=0.1):
-        if (temp is 0.1):
-            assert 1 == 2
-        # Calculates the KL Divergence between two Bernoulli distributions 
+        # Calculates the KL Divergence between two Bernoulli distributions
         din, dout = self.size[l], self.size[l + 1]
         eps = 10e-8
         if self.reparam_mode is 'gumbsoft':

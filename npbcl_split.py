@@ -17,7 +17,7 @@ np.random.seed(10)
 
 hidden_size = [200, ]
 alpha = [30]
-no_epochs = 5
+no_epochs = 20
 no_tasks = 5
 coreset_size = 0  # 200
 coreset_method = "kcen"

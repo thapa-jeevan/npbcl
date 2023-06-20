@@ -9,7 +9,7 @@ from ibpbcl import IBP_BCL
 
 parser = argparse.ArgumentParser(description='Train', add_help=True)
 parser.add_argument('--n_hidden_layers', type=int, default=1, help='Number of tasks')
-parser.add_argument('--n_epochs', type=int, default=5, help='Number of tasks')
+parser.add_argument('--n_epochs', type=int, default=20, help='Number of tasks')
 parser.add_argument('--n_tasks', type=int, default=5, help='Number of tasks')
 parser.add_argument('--single_head', action="store_true")
 args = parser.parse_args()

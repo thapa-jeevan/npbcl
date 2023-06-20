@@ -5,4 +5,6 @@ saves/
 *png
 *log
 Convolutional/*.log
-
+Convolutional/logfile.log
+*sh
+reports
