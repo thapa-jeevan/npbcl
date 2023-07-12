@@ -36,10 +36,10 @@ import torch
 torch.manual_seed(8)
 np.random.seed(10)
 
-hidden_size = [64, 256, '512', 256, 128]
-alpha = [8, 32, 64, 32, 16]
-# hidden_size = [128, 256, 512, '2048', 2048, 2048]
-# alpha = [20, 60, 160, 440, 440, 440]
+# hidden_size = [64, 256, '512', 256, 128]
+# alpha = [8, 32, 64, 32, 16]
+hidden_size = [128, 256, 512, '2048', 2048, 2048]
+alpha = [20, 60, 160, 440, 440, 440]
 no_epochs = 5
 no_tasks = 5
 coreset_size = 0  # 200
@@ -57,4 +57,4 @@ data_gen = SplitCifar10Generator5()
 model = IBP_BCL(hidden_size, alpha, no_epochs, data_gen, coreset_method, coreset_size, single_head, grow=False)
 
 accs, _ = model.batch_train(batch_size)
-np.save('./saves/permutedmnist_accuracies.npy', accs)
+np.save('./saves/cifar10_accuracies.npy', accs)

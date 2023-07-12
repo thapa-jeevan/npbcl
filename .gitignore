@@ -1,0 +1,10 @@
+.idea
+.DS_Store
+datasets/
+saves/
+*png
+*log
+Convolutional/*.log
+Convolutional/logfile.log
+*sh
+reports

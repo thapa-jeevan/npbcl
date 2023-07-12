@@ -1,3 +1,4 @@
+import os
 from copy import deepcopy
 
 import matplotlib.pyplot as plt
@@ -15,7 +16,7 @@ np.random.seed(10)
 
 class IBP_BCL:
     def __init__(self, hidden_size, alpha, no_epochs, data_gen, coreset_method, coreset_size=0, single_head=True,
-                 grow=False):
+                 grow=False, dataset=None):
         """
         hidden_size : list of network hidden layer sizes
         alpha : IBP prior concentration parameters
@@ -37,6 +38,11 @@ class IBP_BCL:
         self.single_head = single_head
         self.grow = grow
         self.cuda = torch.cuda.is_available()
+        if dataset:
+            self.save_path = f"results/{dataset}"
+            self.ckpt_save_path = f"checkpoints/{dataset}"
+            os.makedirs(self.save_path, exist_ok=True)
+            os.makedirs(self.ckpt_save_path, exist_ok=True)
 
     def rand_from_batch(self, x_coreset, y_coreset, x_train, y_train, coreset_size):
         """ Random coreset selection """
@@ -138,6 +144,7 @@ class IBP_BCL:
                     final_model = model
 
             x_test, y_test = x_testsets[i], y_testsets[i]
+
             pred = final_model.prediction_prob(x_test, i)
             pred_mean = np.mean(pred, axis=1)
             pred_y = np.argmax(pred_mean, axis=1)
@@ -167,7 +174,10 @@ class IBP_BCL:
         x_trainset, y_trainset = [], []
         all_acc = np.array([])
         self.max_tasks = self.data_gen.max_iter
-        fig1, ax1 = plt.subplots(1, self.max_tasks, figsize=[10, 5])
+        fig1, ax1 = plt.subplots(1, self.max_tasks, figsize=[self.max_tasks * 2, 5])
+
+        fig_sparsity_acc, ax_sparsity_acc = plt.subplots(1, 2, figsize=[self.max_tasks * 2, 5])
+        sparsity_acc_tasks = []
         # Training the model sequentially.
         for task_id in range(self.max_tasks):
             # Loading training and test data for current task
@@ -187,7 +197,8 @@ class IBP_BCL:
             if self.coreset_size > 0:
                 x_coresets, y_coresets, x_train, y_train = self.coreset_method(x_coresets, y_coresets, x_train, y_train,
                                                                                self.coreset_size)
-            # Training the network  
+
+            # Training the network
             mf_model = IBP_BNN(in_dim, self.hidden_size, out_dim, x_train.shape[0], self.max_tasks,
                                prev_means=mf_weights, prev_log_variances=mf_variances,
                                prev_masks=prev_masks, alpha=self.alpha, beta=self.beta, prev_pber=prev_pber,
@@ -204,13 +215,13 @@ class IBP_BCL:
             self.hidden_size = deepcopy(mf_model.size[1:-1])
 
             # Figure of masks that has been learned for all seen tasks.
-            fig, ax = plt.subplots(1, task_id + 1, figsize=[10, 5])
+            fig, ax = plt.subplots(1, task_id + 1, figsize=[self.max_tasks * 2, 5])
             for i, m in enumerate(prev_masks[0][:task_id + 1]):
                 if (task_id == 0):
                     ax.imshow(m, vmin=0, vmax=1)
                 else:
                     ax[i].imshow(m, vmin=0, vmax=1)
-            fig.savefig("all_masks.png")
+            fig.savefig(os.path.join(self.save_path, "all_masks.png"))
             # Calculating Union of all task masks and also for visualizing the layer wise network sparsity
             sparsity = []
             kl_mask = []
@@ -228,17 +239,29 @@ class IBP_BCL:
                 filled = np.mean(mask)
                 sparsity.append(filled)
             ax1[task_id].imshow(mask, vmin=0, vmax=1)
-            fig1.savefig("union_mask.png")
+            fig1.savefig(os.path.join(self.save_path, "union_mask.png"))
+
+            sparsity_acc_tasks.append(sparsity[0])
+            ax_sparsity_acc[0].plot(sparsity_acc_tasks, color="blue")
+            ax_sparsity_acc[0].scatter(np.arange(len(sparsity_acc_tasks)), sparsity_acc_tasks, color="blue")
+
             print("Network sparsity : ", sparsity)
+
             mf_model.grow_net = False
 
             acc = self.get_scores(mf_model, x_testsets, y_testsets, x_coresets, y_coresets,
                                   self.hidden_size, self.no_epochs, self.single_head, batch_size, kl_mask)
 
-            torch.save(mf_model.state_dict(), "./saves/model_last_" + str(task_id))
+            ckpt_path = os.path.join(self.ckpt_save_path, "model_last_" + str(task_id))
+            torch.save(mf_model.state_dict(), ckpt_path)
             del mf_model
             torch.cuda.empty_cache()
-            all_acc = self.concatenate_results(acc, all_acc);
+            all_acc = self.concatenate_results(acc, all_acc)
+            ax_sparsity_acc[1].plot(np.nanmean(all_acc, axis=1), color="red")
+            ax_sparsity_acc[1].scatter(np.arange(len(sparsity_acc_tasks)), np.nanmean(all_acc, axis=1), color="red")
+
+            fig_sparsity_acc.savefig(os.path.join(self.save_path, "sparsity_acc_tasks.png"))
+
             print(all_acc);
             print('*****')
 

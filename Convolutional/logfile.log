@@ -1,0 +1,291 @@
+Current Noise 0.0
+Epoch 1, Iter 0, Cost Lik -0.6931207180023193, KL_gauss 0.0, KL_nu 1.6731654405593872
+Epoch 1, Iter 10, Cost Lik -0.6073621511459351, KL_gauss 0.0, KL_nu 0.4325927495956421
+Epoch 1, Iter 20, Cost Lik -0.40137529373168945, KL_gauss 0.0, KL_nu 0.35778236389160156
+Epoch 1, Iter 30, Cost Lik -0.387050062417984, KL_gauss 0.0, KL_nu 0.30866533517837524
+IBP prior alpha : [8.597808, 34.87424, 67.20738, 34.25954]
+Epoch: 0001 cost= 0.9628 cost2= 0.0000 cost3= -0.5018 cost4= 0.4610 cost_val= -0.3487 acc_val= 0.8480
+Temperature : [tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0')]
+Epoch 2, Iter 0, Cost Lik -0.3642513155937195, KL_gauss 0.0, KL_nu 0.2954409420490265
+Epoch 2, Iter 10, Cost Lik -0.36042115092277527, KL_gauss 0.0, KL_nu 0.2785201072692871
+Epoch 2, Iter 20, Cost Lik -0.2906620502471924, KL_gauss 0.0, KL_nu 0.25966086983680725
+Epoch 2, Iter 30, Cost Lik -0.3121374547481537, KL_gauss 0.0, KL_nu 0.2361229658126831
+IBP prior alpha : [9.093182, 34.4173, 66.62425, 33.13772]
+Minimum average changed to  tensor(-0.8580, device='cuda:0')
+Epoch: 0002 cost= 0.5894 cost2= 0.0000 cost3= -0.3259 cost4= 0.2635 cost_val= -0.3148 acc_val= 0.8580
+Temperature : [tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0')]
+Epoch 3, Iter 0, Cost Lik -0.277349054813385, KL_gauss 0.0, KL_nu 0.22773681581020355
+Epoch 3, Iter 10, Cost Lik -0.24658426642417908, KL_gauss 0.0, KL_nu 0.2108219861984253
+Epoch 3, Iter 20, Cost Lik -0.32728636264801025, KL_gauss 0.0, KL_nu 0.1782447248697281
+Epoch 3, Iter 30, Cost Lik -0.2921970784664154, KL_gauss 0.0, KL_nu 0.13884733617305756
+IBP prior alpha : [9.455626, 33.46759, 66.0405, 32.744434]
+Minimum average changed to  tensor(-0.8590, device='cuda:0')
+Epoch: 0003 cost= 0.4954 cost2= 0.0000 cost3= -0.3136 cost4= 0.1818 cost_val= -0.3140 acc_val= 0.8590
+Temperature : [tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0')]
+Epoch 4, Iter 0, Cost Lik -0.33940303325653076, KL_gauss 0.0, KL_nu 0.09413468092679977
+Epoch 4, Iter 10, Cost Lik -0.17724581062793732, KL_gauss 0.0, KL_nu -0.02191939577460289
+Epoch 4, Iter 20, Cost Lik -0.32560762763023376, KL_gauss 0.0, KL_nu -0.17251931130886078
+Epoch 4, Iter 30, Cost Lik -0.29155585169792175, KL_gauss 0.0, KL_nu -0.3258614242076874
+IBP prior alpha : [9.195637, 32.079308, 65.522224, 32.686768]
+Minimum average changed to  tensor(-0.8960, device='cuda:0')
+Epoch: 0004 cost= 0.1289 cost2= 0.0000 cost3= -0.2708 cost4= -0.1419 cost_val= -0.2551 acc_val= 0.8960
+Temperature : [tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0')]
+Epoch 5, Iter 0, Cost Lik -0.27283889055252075, KL_gauss 0.0, KL_nu -0.42169269919395447
+Epoch 5, Iter 10, Cost Lik -0.2228441834449768, KL_gauss 0.0, KL_nu -0.5574905872344971
+Epoch 5, Iter 20, Cost Lik -0.2745796740055084, KL_gauss 0.0, KL_nu -0.6999516487121582
+Epoch 5, Iter 30, Cost Lik -0.1380072981119156, KL_gauss 0.0, KL_nu -0.861653208732605
+IBP prior alpha : [8.377342, 32.256023, 64.657715, 32.464886]
+Minimum average changed to  tensor(-0.9040, device='cuda:0')
+Epoch: 0005 cost= -0.4436 cost2= 0.0000 cost3= -0.2326 cost4= -0.6763 cost_val= -0.2374 acc_val= 0.9040
+Temperature : [tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0')]
+Selective Retraining
+IBP prior alpha : [8.377342, 32.256023, 64.657715, 32.464886]
+Epoch: 0006 cost= 0.3725 cost2= 0.0000 cost3= -0.3725 cost4= 0.0024 cost_val= -0.2946 acc_val= 0.8770
+IBP prior alpha : [8.377342, 32.256023, 64.657715, 32.464886]
+Epoch: 0007 cost= 0.2698 cost2= 0.0000 cost3= -0.2698 cost4= 0.0024 cost_val= -0.2551 acc_val= 0.9000
+Epoch: 0008 cost= 0.2285 cost2= 0.0000 cost3= -0.2285 cost4= 0.0024 cost_val= -0.2509 acc_val= 0.8970
+IBP prior alpha : [8.377342, 32.256023, 64.657715, 32.464886]
+Epoch: 0009 cost= 0.2301 cost2= 0.0000 cost3= -0.2301 cost4= 0.0024 cost_val= -0.2314 acc_val= 0.9090
+IBP prior alpha : [8.377342, 32.256023, 64.657715, 32.464886]
+Epoch: 0010 cost= 0.2034 cost2= 0.0000 cost3= -0.2034 cost4= 0.0024 cost_val= -0.2243 acc_val= 0.9220
+Optimization Finished!
+IBP prior alpha : [8.377342, 32.256023, 64.657715, 32.464886]
+Network sparsity :  [0.3020833333333333, 0.0494384765625, 0.26746368408203125, 0.30157470703125]
+IBP prior alpha : [8.377342, 32.256023, 64.657715, 32.464886]
+[[0.9215]]
+*****
+0 0 torch.Size([1, 64]) torch.Size([1, 64])
+1 1 torch.Size([1, 256]) torch.Size([1, 256])
+2 3 torch.Size([1, 256]) torch.Size([1, 256])
+3 4 torch.Size([1, 128]) torch.Size([1, 128])
+Current Noise 0.0
+Epoch 1, Iter 0, Cost Lik -0.6857140064239502, KL_gauss 0.0, KL_nu 1.6779574155807495
+Epoch 1, Iter 10, Cost Lik -0.49297645688056946, KL_gauss 0.023328742012381554, KL_nu 0.43200331926345825
+Epoch 1, Iter 20, Cost Lik -0.5621351003646851, KL_gauss 0.012125277891755104, KL_nu 0.3660546541213989
+Epoch 1, Iter 30, Cost Lik -0.5037163496017456, KL_gauss 0.007203075103461742, KL_nu 0.3099495470523834
+IBP prior alpha : [9.34141, 35.43245, 67.89596, 34.761562]
+Epoch: 0001 cost= 1.0246 cost2= 0.0140 cost3= -0.5493 cost4= 0.4613 cost_val= -0.5428 acc_val= 0.7340
+Temperature : [tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0')]
+Epoch 2, Iter 0, Cost Lik -0.4921119213104248, KL_gauss 0.006906153634190559, KL_nu 0.31172963976860046
+Epoch 2, Iter 10, Cost Lik -0.5020096302032471, KL_gauss 0.008566400036215782, KL_nu 0.2731943726539612
+Epoch 2, Iter 20, Cost Lik -0.5006234049797058, KL_gauss 0.007756005506962538, KL_nu 0.258704274892807
+Epoch 2, Iter 30, Cost Lik -0.5160232782363892, KL_gauss 0.007646534591913223, KL_nu 0.23435741662979126
+IBP prior alpha : [10.025635, 35.142014, 67.364265, 33.605595]
+Minimum average changed to  tensor(-0.7620, device='cuda:0')
+Epoch: 0002 cost= 0.7704 cost2= 0.0085 cost3= -0.4997 cost4= 0.2622 cost_val= -0.4955 acc_val= 0.7620
+Temperature : [tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0')]
+Epoch 3, Iter 0, Cost Lik -0.5027942657470703, KL_gauss 0.007991787977516651, KL_nu 0.2200922816991806
+Epoch 3, Iter 10, Cost Lik -0.49545803666114807, KL_gauss 0.008019098080694675, KL_nu 0.20077446103096008
+Epoch 3, Iter 20, Cost Lik -0.5060762166976929, KL_gauss 0.010457144118845463, KL_nu 0.17910082638263702
+Epoch 3, Iter 30, Cost Lik -0.4606257677078247, KL_gauss 0.010019651614129543, KL_nu 0.137147456407547
+Epoch: 0003 cost= 0.6619 cost2= 0.0090 cost3= -0.4753 cost4= 0.1777 cost_val= -0.5214 acc_val= 0.7380
+Temperature : [tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0')]
+Epoch 4, Iter 0, Cost Lik -0.47713595628738403, KL_gauss 0.008658213540911674, KL_nu 0.11599455028772354
+Epoch 4, Iter 10, Cost Lik -0.489277720451355, KL_gauss 0.008629294112324715, KL_nu -0.014781306497752666
+Epoch 4, Iter 20, Cost Lik -0.5169826149940491, KL_gauss 0.0105195427313447, KL_nu -0.16503934562206268
+Epoch 4, Iter 30, Cost Lik -0.4771217405796051, KL_gauss 0.009204366244375706, KL_nu -0.319231241941452
+IBP prior alpha : [9.620691, 35.78874, 66.549164, 33.143738]
+Minimum average changed to  tensor(-0.7760, device='cuda:0')
+Epoch: 0004 cost= 0.3391 cost2= 0.0097 cost3= -0.4634 cost4= -0.1339 cost_val= -0.4637 acc_val= 0.7760
+Temperature : [tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0')]
+Epoch 5, Iter 0, Cost Lik -0.46166518330574036, KL_gauss 0.00930647924542427, KL_nu -0.41826140880584717
+Epoch 5, Iter 10, Cost Lik -0.3894340395927429, KL_gauss 0.00888286903500557, KL_nu -0.5739979147911072
+Epoch 5, Iter 20, Cost Lik -0.39949744939804077, KL_gauss 0.0121845081448555, KL_nu -0.7245173454284668
+Epoch 5, Iter 30, Cost Lik -0.431377649307251, KL_gauss 0.013157207518815994, KL_nu -0.8898165822029114
+Epoch: 0005 cost= -0.2263 cost2= 0.0117 cost3= -0.4455 cost4= -0.6835 cost_val= -0.4645 acc_val= 0.7660
+Temperature : [tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0')]
+Selective Retraining
+IBP prior alpha : [9.327533, 35.718094, 65.43426, 32.64249]
+Epoch: 0006 cost= 0.5375 cost2= 0.0180 cost3= -0.5195 cost4= 0.0049 cost_val= -0.4824 acc_val= 0.7750
+IBP prior alpha : [9.327533, 35.718094, 65.43426, 32.64249]
+Epoch: 0007 cost= 0.4703 cost2= 0.0068 cost3= -0.4636 cost4= 0.0049 cost_val= -0.4723 acc_val= 0.7850
+IBP prior alpha : [9.327533, 35.718094, 65.43426, 32.64249]
+Epoch: 0008 cost= 0.4583 cost2= 0.0055 cost3= -0.4528 cost4= 0.0049 cost_val= -0.4655 acc_val= 0.7920
+IBP prior alpha : [9.327533, 35.718094, 65.43426, 32.64249]
+Epoch: 0009 cost= 0.4453 cost2= 0.0054 cost3= -0.4399 cost4= 0.0049 cost_val= -0.4480 acc_val= 0.7960
+Epoch: 0010 cost= 0.4573 cost2= 0.0071 cost3= -0.4502 cost4= 0.0049 cost_val= -0.4708 acc_val= 0.7810
+Optimization Finished!
+IBP prior alpha : [9.327533, 35.718094, 65.43426, 32.64249]
+Network sparsity :  [0.5260416666666666, 0.07513427734375, 0.42559051513671875, 0.376953125]
+IBP prior alpha : [9.327533, 35.718094, 65.43426, 32.64249]
+[[0.9215    nan]
+ [0.92   0.794 ]]
+*****
+0 0 torch.Size([1, 64]) torch.Size([2, 64])
+1 1 torch.Size([1, 256]) torch.Size([2, 256])
+2 3 torch.Size([1, 256]) torch.Size([2, 256])
+3 4 torch.Size([1, 128]) torch.Size([2, 128])
+Current Noise 0.0
+Epoch 1, Iter 0, Cost Lik -0.6954237818717957, KL_gauss 0.0, KL_nu 1.6685460805892944
+Epoch 1, Iter 10, Cost Lik -0.5144978165626526, KL_gauss 0.03880762308835983, KL_nu 0.41399627923965454
+Epoch 1, Iter 20, Cost Lik -0.4459306001663208, KL_gauss 0.020697392523288727, KL_nu 0.35961854457855225
+Epoch 1, Iter 30, Cost Lik -0.4176620543003082, KL_gauss 0.014384855516254902, KL_nu 0.30376461148262024
+IBP prior alpha : [10.189146, 38.83109, 68.66183, 35.028305]
+Epoch: 0001 cost= 0.9680 cost2= 0.0235 cost3= -0.4914 cost4= 0.4532 cost_val= -0.4539 acc_val= 0.7740
+Temperature : [tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0')]
+Epoch 2, Iter 0, Cost Lik -0.41323891282081604, KL_gauss 0.012211163528263569, KL_nu 0.2926730215549469
+Epoch 2, Iter 10, Cost Lik -0.5213351845741272, KL_gauss 0.014066988602280617, KL_nu 0.2708578407764435
+Epoch 2, Iter 20, Cost Lik -0.44886526465415955, KL_gauss 0.019040202721953392, KL_nu 0.23879069089889526
+Epoch 2, Iter 30, Cost Lik -0.3363756537437439, KL_gauss 0.02003628760576248, KL_nu 0.22780011594295502
+IBP prior alpha : [10.530037, 38.870384, 68.22795, 33.807186]
+Minimum average changed to  tensor(-0.7890, device='cuda:0')
+Epoch: 0002 cost= 0.6788 cost2= 0.0156 cost3= -0.4104 cost4= 0.2528 cost_val= -0.4500 acc_val= 0.7890
+Temperature : [tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0')]
+Epoch 3, Iter 0, Cost Lik -0.4206392168998718, KL_gauss 0.019141793251037598, KL_nu 0.21430355310440063
+Epoch 3, Iter 10, Cost Lik -0.3689334988594055, KL_gauss 0.016734851524233818, KL_nu 0.1976901888847351
+Epoch 3, Iter 20, Cost Lik -0.39354273676872253, KL_gauss 0.013415786437690258, KL_nu 0.170462965965271
+Epoch 3, Iter 30, Cost Lik -0.33890053629875183, KL_gauss 0.014245506376028061, KL_nu 0.14686045050621033
+IBP prior alpha : [10.371988, 39.449387, 67.66482, 33.448162]
+Minimum average changed to  tensor(-0.8130, device='cuda:0')
+Epoch: 0003 cost= 0.5653 cost2= 0.0155 cost3= -0.3766 cost4= 0.1733 cost_val= -0.4052 acc_val= 0.8130
+Temperature : [tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0')]
+Epoch 4, Iter 0, Cost Lik -0.3672749102115631, KL_gauss 0.013873495161533356, KL_nu 0.10655757784843445
+Epoch 4, Iter 10, Cost Lik -0.43403160572052, KL_gauss 0.012613923288881779, KL_nu 0.004374533426016569
+Epoch 4, Iter 20, Cost Lik -0.3208390772342682, KL_gauss 0.015555272810161114, KL_nu -0.14959105849266052
+Epoch 4, Iter 30, Cost Lik -0.4294050633907318, KL_gauss 0.02251807600259781, KL_nu -0.2833845019340515
+IBP prior alpha : [10.065773, 37.814182, 67.14129, 33.25653]
+Minimum average changed to  tensor(-0.8220, device='cuda:0')
+Epoch: 0004 cost= 0.2725 cost2= 0.0156 cost3= -0.3708 cost4= -0.1138 cost_val= -0.4147 acc_val= 0.8220
+Temperature : [tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0')]
+Epoch 5, Iter 0, Cost Lik -0.3977528214454651, KL_gauss 0.019106291234493256, KL_nu -0.3811607360839844
+Epoch 5, Iter 10, Cost Lik -0.38890281319618225, KL_gauss 0.013979650102555752, KL_nu -0.5264403223991394
+Epoch 5, Iter 20, Cost Lik -0.41653841733932495, KL_gauss 0.01562370266765356, KL_nu -0.6735474467277527
+Epoch 5, Iter 30, Cost Lik -0.32038649916648865, KL_gauss 0.015171276405453682, KL_nu -0.8223264217376709
+IBP prior alpha : [11.086032, 38.237648, 66.158615, 32.845634]
+Minimum average changed to  tensor(-0.8260, device='cuda:0')
+Epoch: 0005 cost= -0.2559 cost2= 0.0158 cost3= -0.3608 cost4= -0.6325 cost_val= -0.4023 acc_val= 0.8260
+Temperature : [tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0')]
+Selective Retraining
+IBP prior alpha : [11.086032, 38.237648, 66.158615, 32.845634]
+Epoch: 0006 cost= 0.4598 cost2= 0.0281 cost3= -0.4318 cost4= 0.0025 cost_val= -0.4128 acc_val= 0.8050
+Epoch: 0007 cost= 0.3924 cost2= 0.0139 cost3= -0.3785 cost4= 0.0025 cost_val= -0.4227 acc_val= 0.8000
+IBP prior alpha : [11.086032, 38.237648, 66.158615, 32.845634]
+Epoch: 0008 cost= 0.3789 cost2= 0.0115 cost3= -0.3674 cost4= 0.0025 cost_val= -0.3907 acc_val= 0.8170
+Epoch: 0009 cost= 0.3629 cost2= 0.0127 cost3= -0.3502 cost4= 0.0025 cost_val= -0.4437 acc_val= 0.8010
+Epoch: 0010 cost= 0.3512 cost2= 0.0108 cost3= -0.3404 cost4= 0.0025 cost_val= -0.3935 acc_val= 0.8150
+Optimization Finished!
+IBP prior alpha : [11.086032, 38.237648, 66.158615, 32.845634]
+Network sparsity :  [0.6822916666666666, 0.09820556640625, 0.5396041870117188, 0.444732666015625]
+IBP prior alpha : [11.086032, 38.237648, 66.158615, 32.845634]
+[[0.9215    nan    nan]
+ [0.92   0.794     nan]
+ [0.9225 0.793  0.8595]]
+*****
+0 0 torch.Size([1, 64]) torch.Size([3, 64])
+1 1 torch.Size([1, 256]) torch.Size([3, 256])
+2 3 torch.Size([1, 256]) torch.Size([3, 256])
+3 4 torch.Size([1, 128]) torch.Size([3, 128])
+Current Noise 0.0
+Epoch 1, Iter 0, Cost Lik -0.7107497453689575, KL_gauss 0.0, KL_nu 1.6533925533294678
+Epoch 1, Iter 10, Cost Lik -0.5694656372070312, KL_gauss 0.05921006202697754, KL_nu 0.4181320071220398
+Epoch 1, Iter 20, Cost Lik -0.47053229808807373, KL_gauss 0.028327791020274162, KL_nu 0.3446044623851776
+Epoch 1, Iter 30, Cost Lik -0.2980477809906006, KL_gauss 0.03540382534265518, KL_nu 0.303739070892334
+IBP prior alpha : [12.135126, 41.42647, 69.35377, 35.134686]
+Epoch: 0001 cost= 0.9700 cost2= 0.0369 cost3= -0.4905 cost4= 0.4426 cost_val= -0.3471 acc_val= 0.8430
+Temperature : [tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0')]
+Epoch 2, Iter 0, Cost Lik -0.30062630772590637, KL_gauss 0.03117791749536991, KL_nu 0.2907026410102844
+Epoch 2, Iter 10, Cost Lik -0.22806145250797272, KL_gauss 0.026956181973218918, KL_nu 0.2540997564792633
+Epoch 2, Iter 20, Cost Lik -0.25913602113723755, KL_gauss 0.024498870596289635, KL_nu 0.2382657825946808
+Epoch 2, Iter 30, Cost Lik -0.2355443388223648, KL_gauss 0.020603841170668602, KL_nu 0.23222878575325012
+IBP prior alpha : [12.6570015, 42.136875, 68.786255, 33.925255]
+Minimum average changed to  tensor(-0.9080, device='cuda:0')
+Epoch: 0002 cost= 0.5584 cost2= 0.0250 cost3= -0.2859 cost4= 0.2475 cost_val= -0.2422 acc_val= 0.9080
+Temperature : [tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0')]
+Epoch 3, Iter 0, Cost Lik -0.22693747282028198, KL_gauss 0.022656669840216637, KL_nu 0.19910046458244324
+Epoch 3, Iter 10, Cost Lik -0.2596184313297272, KL_gauss 0.016184477135539055, KL_nu 0.18891049921512604
+Epoch 3, Iter 20, Cost Lik -0.22939667105674744, KL_gauss 0.01658543571829796, KL_nu 0.1803780049085617
+Epoch 3, Iter 30, Cost Lik -0.2587050795555115, KL_gauss 0.022511547431349754, KL_nu 0.14294427633285522
+Epoch: 0003 cost= 0.4200 cost2= 0.0192 cost3= -0.2297 cost4= 0.1711 cost_val= -0.2298 acc_val= 0.9070
+Temperature : [tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0')]
+Epoch 4, Iter 0, Cost Lik -0.2104492336511612, KL_gauss 0.02219224162399769, KL_nu 0.11264311522245407
+Epoch 4, Iter 10, Cost Lik -0.1720978319644928, KL_gauss 0.018933730199933052, KL_nu 0.011396445333957672
+Epoch 4, Iter 20, Cost Lik -0.25933781266212463, KL_gauss 0.021667923778295517, KL_nu -0.11036428064107895
+Epoch 4, Iter 30, Cost Lik -0.16945941746234894, KL_gauss 0.019891008734703064, KL_nu -0.2477588802576065
+Epoch: 0004 cost= 0.1443 cost2= 0.0202 cost3= -0.2104 cost4= -0.0862 cost_val= -0.2323 acc_val= 0.9030
+Temperature : [tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0')]
+Epoch 5, Iter 0, Cost Lik -0.21335478127002716, KL_gauss 0.01987481862306595, KL_nu -0.3260825276374817
+Epoch 5, Iter 10, Cost Lik -0.1821533888578415, KL_gauss 0.017636680975556374, KL_nu -0.46229568123817444
+Epoch 5, Iter 20, Cost Lik -0.22229644656181335, KL_gauss 0.020429491996765137, KL_nu -0.6136199235916138
+Epoch 5, Iter 30, Cost Lik -0.28027480840682983, KL_gauss 0.02707011066377163, KL_nu -0.7471678853034973
+IBP prior alpha : [12.36378, 44.627342, 66.80966, 32.846447]
+Minimum average changed to  tensor(-0.9190, device='cuda:0')
+Epoch: 0005 cost= -0.3632 cost2= 0.0212 cost3= -0.1894 cost4= -0.5737 cost_val= -0.2039 acc_val= 0.9190
+Temperature : [tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0')]
+Selective Retraining
+IBP prior alpha : [12.36378, 44.627342, 66.80966, 32.846447]
+Epoch: 0006 cost= 0.3337 cost2= 0.0377 cost3= -0.2960 cost4= 0.0044 cost_val= -0.2722 acc_val= 0.8700
+IBP prior alpha : [12.36378, 44.627342, 66.80966, 32.846447]
+Epoch: 0007 cost= 0.2566 cost2= 0.0210 cost3= -0.2356 cost4= 0.0044 cost_val= -0.2480 acc_val= 0.8890
+IBP prior alpha : [12.36378, 44.627342, 66.80966, 32.846447]
+Epoch: 0008 cost= 0.2331 cost2= 0.0187 cost3= -0.2144 cost4= 0.0044 cost_val= -0.2055 acc_val= 0.9160
+Epoch: 0009 cost= 0.2162 cost2= 0.0163 cost3= -0.2000 cost4= 0.0044 cost_val= -0.2145 acc_val= 0.9050
+IBP prior alpha : [12.36378, 44.627342, 66.80966, 32.846447]
+Epoch: 0010 cost= 0.2013 cost2= 0.0153 cost3= -0.1860 cost4= 0.0044 cost_val= -0.1826 acc_val= 0.9300
+Optimization Finished!
+IBP prior alpha : [12.36378, 44.627342, 66.80966, 32.846447]
+Network sparsity :  [0.8229166666666666, 0.1165771484375, 0.6571044921875, 0.5308837890625]
+IBP prior alpha : [12.36378, 44.627342, 66.80966, 32.846447]
+[[0.9215    nan    nan    nan]
+ [0.92   0.794     nan    nan]
+ [0.9225 0.793  0.8595    nan]
+ [0.9205 0.782  0.8575 0.935 ]]
+*****
+0 0 torch.Size([1, 64]) torch.Size([4, 64])
+1 1 torch.Size([1, 256]) torch.Size([4, 256])
+2 3 torch.Size([1, 256]) torch.Size([4, 256])
+3 4 torch.Size([1, 128]) torch.Size([4, 128])
+Current Noise 0.0
+Epoch 1, Iter 0, Cost Lik -0.7319764494895935, KL_gauss 0.0, KL_nu 1.6569595336914062
+Epoch 1, Iter 10, Cost Lik -0.4074283242225647, KL_gauss 0.06982304900884628, KL_nu 0.3912484347820282
+Epoch 1, Iter 20, Cost Lik -0.29864993691444397, KL_gauss 0.04353140667080879, KL_nu 0.35191649198532104
+Epoch 1, Iter 30, Cost Lik -0.3343667984008789, KL_gauss 0.023996639996767044, KL_nu 0.29004284739494324
+IBP prior alpha : [13.234021, 48.07603, 70.0812, 35.259396]
+Epoch: 0001 cost= 0.8783 cost2= 0.0426 cost3= -0.4025 cost4= 0.4332 cost_val= -0.3193 acc_val= 0.8720
+Temperature : [tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0'), tensor(4.9593, device='cuda:0')]
+Epoch 2, Iter 0, Cost Lik -0.30587807297706604, KL_gauss 0.01908157952129841, KL_nu 0.26866599917411804
+Epoch 2, Iter 10, Cost Lik -0.1866040974855423, KL_gauss 0.017910465598106384, KL_nu 0.24760209023952484
+Epoch 2, Iter 20, Cost Lik -0.3407159745693207, KL_gauss 0.021065693348646164, KL_nu 0.221345454454422
+Epoch 2, Iter 30, Cost Lik -0.21429403126239777, KL_gauss 0.021335164085030556, KL_nu 0.2196377068758011
+IBP prior alpha : [13.419125, 48.362137, 69.69039, 33.98718]
+Minimum average changed to  tensor(-0.9120, device='cuda:0')
+Epoch: 0002 cost= 0.5587 cost2= 0.0220 cost3= -0.2979 cost4= 0.2387 cost_val= -0.2522 acc_val= 0.9120
+Temperature : [tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0'), tensor(2.4595, device='cuda:0')]
+Epoch 3, Iter 0, Cost Lik -0.3081111013889313, KL_gauss 0.017932387068867683, KL_nu 0.20021571218967438
+Epoch 3, Iter 10, Cost Lik -0.23584657907485962, KL_gauss 0.016147403046488762, KL_nu 0.1738216131925583
+Epoch 3, Iter 20, Cost Lik -0.1635427325963974, KL_gauss 0.016968226060271263, KL_nu 0.15157334506511688
+Epoch 3, Iter 30, Cost Lik -0.23312917351722717, KL_gauss 0.021841270849108696, KL_nu 0.14215660095214844
+Epoch: 0003 cost= 0.4391 cost2= 0.0185 cost3= -0.2542 cost4= 0.1665 cost_val= -0.2940 acc_val= 0.8870
+Temperature : [tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0'), tensor(1.2197, device='cuda:0')]
+Epoch 4, Iter 0, Cost Lik -0.2236364632844925, KL_gauss 0.018094390630722046, KL_nu 0.11971212923526764
+Epoch 4, Iter 10, Cost Lik -0.3374616801738739, KL_gauss 0.015046371147036552, KL_nu 0.046427950263023376
+Epoch 4, Iter 20, Cost Lik -0.28518006205558777, KL_gauss 0.021200792863965034, KL_nu -0.07675528526306152
+Epoch 4, Iter 30, Cost Lik -0.2659199833869934, KL_gauss 0.02080252580344677, KL_nu -0.17988081276416779
+Epoch: 0004 cost= 0.2081 cost2= 0.0185 cost3= -0.2375 cost4= -0.0479 cost_val= -0.2265 acc_val= 0.9120
+Temperature : [tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0'), tensor(0.6049, device='cuda:0')]
+Epoch 5, Iter 0, Cost Lik -0.3245023488998413, KL_gauss 0.016553737223148346, KL_nu -0.2705428898334503
+Epoch 5, Iter 10, Cost Lik -0.2404535859823227, KL_gauss 0.019542770460247993, KL_nu -0.3970390558242798
+Epoch 5, Iter 20, Cost Lik -0.2433125078678131, KL_gauss 0.020407332107424736, KL_nu -0.5122926831245422
+Epoch 5, Iter 30, Cost Lik -0.22130022943019867, KL_gauss 0.01767219975590706, KL_nu -0.6423264741897583
+IBP prior alpha : [13.250845, 47.591213, 67.62953, 33.174374]
+Minimum average changed to  tensor(-0.9320, device='cuda:0')
+Epoch: 0005 cost= -0.2248 cost2= 0.0190 cost3= -0.2444 cost4= -0.4881 cost_val= -0.1978 acc_val= 0.9320
+Temperature : [tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0'), tensor(0.3000, device='cuda:0')]
+Selective Retraining
+IBP prior alpha : [13.250845, 47.591213, 67.62953, 33.174374]
+Epoch: 0006 cost= 0.4220 cost2= 0.0539 cost3= -0.3681 cost4= 0.0011 cost_val= -0.2589 acc_val= 0.8930
+IBP prior alpha : [13.250845, 47.591213, 67.62953, 33.174374]
+Epoch: 0007 cost= 0.2881 cost2= 0.0299 cost3= -0.2582 cost4= 0.0011 cost_val= -0.2366 acc_val= 0.9030
+IBP prior alpha : [13.250845, 47.591213, 67.62953, 33.174374]
+Epoch: 0008 cost= 0.2881 cost2= 0.0233 cost3= -0.2649 cost4= 0.0011 cost_val= -0.2259 acc_val= 0.9120
+Epoch: 0009 cost= 0.2629 cost2= 0.0228 cost3= -0.2401 cost4= 0.0011 cost_val= -0.2946 acc_val= 0.8810
+Epoch: 0010 cost= 0.2796 cost2= 0.0236 cost3= -0.2561 cost4= 0.0011 cost_val= -0.2903 acc_val= 0.8750
+Optimization Finished!
+IBP prior alpha : [13.250845, 47.591213, 67.62953, 33.174374]
+Network sparsity :  [0.875, 0.14276123046875, 0.7202072143554688, 0.576812744140625]
+IBP prior alpha : [13.250845, 47.591213, 67.62953, 33.174374]
+[[0.9215    nan    nan    nan    nan]
+ [0.92   0.794     nan    nan    nan]
+ [0.9225 0.793  0.8595    nan    nan]
+ [0.9205 0.782  0.8575 0.935     nan]
+ [0.9095 0.762  0.8495 0.8815 0.904 ]]
+*****

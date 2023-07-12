@@ -28,7 +28,7 @@ batch_size = 256
 data_gen = SplitMnistGenerator()
 # data_gen = NotMnistGenerator()
 # data_gen = FashionMnistGenerator()
-model = IBP_BCL(hidden_size, alpha, no_epochs, data_gen, coreset_method, coreset_size, single_head, grow=False)
+model = IBP_BCL(hidden_size, alpha, no_epochs, data_gen, coreset_method, coreset_size, single_head, grow=False, dataset="split_mnist")
 
 accs, _ = model.batch_train(batch_size)
 np.save('./saves/splitmnist_accuracies.npy', accs)

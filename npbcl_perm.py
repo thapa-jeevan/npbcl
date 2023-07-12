@@ -1,5 +1,6 @@
 import argparse
 import os
+import torch
 
 import matplotlib
 import numpy as np
@@ -16,8 +17,8 @@ args = parser.parse_args()
 
 matplotlib.use('Agg')
 
-# torch.manual_seed(8)
-# np.random.seed(10)
+torch.manual_seed(8)
+np.random.seed(10)
 
 
 hidden_size = [200] * args.n_hidden_layers
@@ -35,7 +36,7 @@ data_gen = PermutedMnistGenerator(no_tasks)
 # data_gen = SplitMnistGenerator()
 # data_gen = NotMnistGenerator()
 # data_gen = FashionMnistGenerator()
-model = IBP_BCL(hidden_size, alpha, no_epochs, data_gen, coreset_method, coreset_size, single_head, grow=False)
+model = IBP_BCL(hidden_size, alpha, no_epochs, data_gen, coreset_method, coreset_size, single_head, grow=False, dataset="perm_mnist")
 
 accs, _ = model.batch_train(batch_size)
 np.save('./saves/permutedmnist_accuracies.npy', accs)

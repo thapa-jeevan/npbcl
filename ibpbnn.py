@@ -458,6 +458,7 @@ class IBP_BNN(nn.Module):
         self._concs1, self._concs2 = nn.ParameterList([]), nn.ParameterList([])  # Posterior parameters based on p_bers.
         self._p_bers = nn.ParameterList([])  # Variational parameters for IBP posterior.
 
+        print("Initialization value for alpha: ", alpha)
         # Iteration over layers to inialize IBP parameters per layer.
         for l in range(self.no_layers - 1):
             din, dout = self.size[l], self.size[l + 1]  # Layer dimenisons
@@ -548,7 +549,7 @@ class IBP_BNN(nn.Module):
                                             temp=temp))  # Calcuting KL divergence between prior and posterior
             # Generating masked weights and biases for current layer
             weight = weights * bs  # weights * ibp_mask
-            bias = biass * (bs.max(dim=1)[0].unsqueeze(1))  # bias * ibp_mask
+            bias = biass * (bs.max(dim=1)[0].unsqueeze(1))
         else:
             weight = weights  # weights
             bias = biass  # bias
@@ -610,10 +611,6 @@ class IBP_BNN(nn.Module):
         dout = conc1.view(-1).shape[0]
         # print(samples.shape, K, din, dout)
         assert samples.shape == torch.Size([K, din, dout])
-        if (samples.mean() != samples.mean()):
-            print(conc1, conc2, _conc1, _conc2)
-            assert 1 == 2
-
         return samples
 
     # Done
@@ -624,13 +621,23 @@ class IBP_BNN(nn.Module):
         vs = self.v_post_distr(l, shape=[no_samples,
                                          din])  # Independently sampling current layer IBP posterior : K x din x dout
         pis = torch.cumprod(vs, dim=2)  # Calcuting Pi's using nu's (IBP prior log probabilities): K x din x dout
+        # print("pi:", pis.min(), pis.max())
         method = 1
         if (method == 0):
-            logit_post = self._p_bers[l].unsqueeze(0) + self.logit(
-                pis)  # Varaitonal posterior log_alpha: K x din x dout
+            logit_post = self.logit(pis) # + self._p_bers[l].unsqueeze(0)
+            # Varaitonal posterior log_alpha: K x din x dout
         elif (method == 1):
-            logit_post = self._p_bers[l].unsqueeze(0) + torch.log(
-                pis + 10e-8)  # - torch.log(pis*(self._p_bers[l].unsqueeze(0).exp()-1)+1)
+            logit_post = self._p_bers[l].unsqueeze(0) + torch.log(pis + 10e-8)
+            # logit_post = torch.ones_like(pis) * (- 0.1)
+            # - torch.log(1 - pis + 10e-8)
+            # print("_p_bers:", self._p_bers[l].min(), self._p_bers[l].max())
+            # # print("logit:", logit_post.min(), logit_post.max())
+            # if not self.training:
+            #     import pdb
+            #     pdb.set_trace()
+            # print(logit_post)
+        elif (method == 2):
+            logit_post = torch.log(pis + 10e-8)
 
         bs = self.reparam_bernoulli(logit_post, no_samples, self.reparam_mode,
                                     temp=temp)  # Reparameterized bernoulli samples: K x din x dout
@@ -802,8 +809,7 @@ class IBP_BNN(nn.Module):
         for l in range(self.no_layers - 1):
             alpha, beta = self.alphas[l].to(self.device), self.betas[l].to(self.device)
             conc1, conc2 = self.softplus(self._concs1[l]), self.softplus(self._concs2[l])
-            # conc_sum2 = alpha + beta
-            # conc_sum1 = conc1 + conc2
+
             eps = 10e-8
             a_numpy = alpha.cpu().detach().numpy()
             b_numpy = np.ones_like(a_numpy)
@@ -836,8 +842,6 @@ class IBP_BNN(nn.Module):
         target = targets.unsqueeze(1).repeat(1, self.no_train_samples, 1)  # Formating desired output : N x K x O
         loss = torch.sum(- target * F.log_softmax(pred, dim=-1), dim=-1)
         log_lik = - (loss).mean()  # Crossentropy Loss
-        if (log_lik != log_lik):
-            assert 1 == 2
         return log_lik, pred
 
     # Done
@@ -1015,7 +1019,7 @@ class IBP_BNN(nn.Module):
 
     # Done 
     def batch_train(self, x_train, y_train, task_idx, no_epochs=100, batch_size=100, display_epoch=10, two_opt=False,
-                    init_temp=10.0):
+                    init_temp=10):
         '''
         This function trains the model on a given training dataset also splits it into training and validation sets.
         x_train : Trianing input Data
@@ -1100,7 +1104,6 @@ class IBP_BNN(nn.Module):
                     batch_x = torch.tensor(cur_x_train[start_ind:end_ind, :]).float().to(self.device)
                     batch_y = torch.tensor(cur_y_train[start_ind:end_ind, :]).float().to(self.device)
                     # Run optimization op (backprop) and cost op (to get loss value)
-
                     c, c1, c2, c3 = self.train_step_all(batch_x, batch_y, task_idx, temp)
 
                     # Compute average loss
@@ -1139,7 +1142,7 @@ class IBP_BNN(nn.Module):
                           "val_loss=", "{:.4f}".format(vc),
                           "val_acc=", "{:.4f}".format(acc))
 
-                    print("Temperature :", [tmp.mean() for tmp in temp])
+                    # print("Temperature :", [tmp.mean() for tmp in temp])
                 costs.append(avg_cost)
 
             # Saving the learned mask

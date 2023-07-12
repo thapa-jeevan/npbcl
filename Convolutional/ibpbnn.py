@@ -67,7 +67,7 @@ class IBP_BNN(nn.Module):
         self.init_var = -10.0  # Prior initializaion log variance.
         self.acts = acts  # Per layer Activations if are explicitly mentioned
         self.gauss_rep = True  # Use gaussian reparameterization
-        self.device = 'cpu'
+        self.device = 'cuda'
         self.relu = F.leaky_relu
         self.learning_rate = learning_rate
         self.init_temp = 10.0  # Initial temperature for concrete distribution
@@ -220,8 +220,6 @@ class IBP_BNN(nn.Module):
 
                 bm_m = torch.zeros(cout) + torch.tensor(prior_mean).view(1, -1)
                 bm_v = torch.zeros(cout) + torch.tensor(prior_var).view(1, -1)
-
-
 
             elif (i == ind):
                 continue
@@ -380,152 +378,6 @@ class IBP_BNN(nn.Module):
         self.weights = [means, logvars]
 
     # Done    
-    def def_parameters(self, in_dim, hidden_size, out_dim, init_means, init_variances, prior_mean, prior_var):
-        # A single list containing all layer sizes
-        layer_sizes = deepcopy(hidden_size)
-        layer_sizes.append(out_dim)
-        layer_sizes.insert(0, in_dim)
-
-        lvar_init = self.init_var  # initialization for log variances if not given.
-        # Defining means and logvariances for weights and biases for model weights and priors. 
-        # Variational Posterior parameters
-        self.W_m = nn.ParameterList([])  # weight means
-        self.b_m = nn.ParameterList([])  # bias means
-        self.W_v = nn.ParameterList([])  # weight variances
-        self.b_v = nn.ParameterList([])  # bias variances
-        self.W_last_m = nn.ParameterList([])  # last layers weight mean
-        self.b_last_m = nn.ParameterList([])  # last layers bias mean
-        self.W_last_v = nn.ParameterList([])  # last layer weight var
-        self.b_last_v = nn.ParameterList([])  # last layer bias var
-        # Prior Parameters
-        self.prior_W_m = []
-        self.prior_b_m = []
-        self.prior_W_v = []
-        self.prior_b_v = []
-        self.prior_W_last_m = []
-        self.prior_b_last_m = []
-        self.prior_W_last_v = []
-        self.prior_b_last_v = []
-
-        # Initialization for non-last layer parameters.
-        for i in range(len(hidden_size)):
-
-            din = layer_sizes[i]
-            dout = layer_sizes[i + 1]
-
-            Wi_m_val = self.truncated_normal([din, dout], stddev=0.01)
-            bi_m_val = self.truncated_normal([dout], stddev=0.01)
-            Wi_v_val = self.constant(lvar_init, shape=[din, dout])
-            bi_v_val = self.constant(lvar_init, shape=[dout])
-            Wi_m_prior = torch.zeros(din, dout) + torch.tensor(prior_mean).view(1, 1)
-            bi_m_prior = torch.zeros(dout) + torch.tensor(prior_mean).view(-1)
-            Wi_v_prior = torch.zeros(din, dout) + torch.tensor(prior_var).view(1, 1)
-            bi_v_prior = torch.zeros(dout) + torch.tensor(prior_var).view(-1)
-
-            if init_means is None or len(init_means[0]) == 0:  # If intial means were not present or given.
-                pass
-            else:  # Intial Means are present
-                Wi_m_val = init_means[0][i]
-                bi_m_val = init_means[1][i]
-                Wi_m_prior = init_means[0][i]
-                bi_m_prior = init_means[1][i]
-                if init_variances is None or len(init_variances[0]) == 0:  # Means are given but variances are not known
-                    pass
-                else:  # Both means and variances were given/known.
-                    Wi_v_val = init_variances[0][i]
-                    bi_v_val = init_variances[1][i]
-                    Wi_v_prior = init_variances[0][i].exp()
-                    bi_v_prior = init_variances[1][i].exp()
-
-            Wi_m = nn.Parameter(Wi_m_val)
-            bi_m = nn.Parameter(bi_m_val)
-            Wi_v = nn.Parameter(Wi_v_val)
-            bi_v = nn.Parameter(bi_v_val)
-
-            # Append Variational parameters
-            self.W_m.append(Wi_m)
-            self.b_m.append(bi_m)
-            self.W_v.append(Wi_v)
-            self.b_v.append(bi_v)
-            # Append Prior parameters
-            self.prior_W_m.append(Wi_m_prior)
-            self.prior_b_m.append(bi_m_prior)
-            self.prior_W_v.append(Wi_v_prior)
-            self.prior_b_v.append(bi_v_prior)
-
-        # Copying the previously trained last layer weights in case of multi head output
-        if init_means is not None and init_variances is not None:
-            init_Wlast_m = init_means[2]
-            init_blast_m = init_means[3]
-            init_Wlast_v = init_variances[2]
-            init_blast_v = init_variances[3]
-            no_tasks = len(init_Wlast_m)
-            for i in range(no_tasks):  # Iterating over previous tasks to copy last layer
-                W_i_m = init_Wlast_m[i]
-                b_i_m = init_blast_m[i]
-                W_i_v = init_Wlast_v[i]
-                b_i_v = init_blast_v[i]
-                Wi_m_prior = init_Wlast_m[i]
-                bi_m_prior = init_blast_m[i]
-                Wi_v_prior = init_Wlast_v[i].exp()
-                bi_v_prior = init_blast_v[i].exp()
-
-                Wi_m = nn.Parameter(W_i_m)
-                bi_m = nn.Parameter(b_i_m)
-                Wi_v = nn.Parameter(W_i_v)
-                bi_v = nn.Parameter(b_i_v)
-                # Copying last layer variational parameters for previous tasks
-                self.W_last_m.append(Wi_m)
-                self.b_last_m.append(bi_m)
-                self.W_last_v.append(Wi_v)
-                self.b_last_v.append(bi_v)
-                # Copying last layer prior parameters for previous tasks
-                self.prior_W_last_m.append(Wi_m_prior)
-                self.prior_b_last_m.append(bi_m_prior)
-                self.prior_W_last_v.append(Wi_v_prior)
-                self.prior_b_last_v.append(bi_v_prior)
-
-        # Adding the last layer weights for current task.
-        if (not self.single_head or len(self.W_last_m) == 0):
-            din = layer_sizes[-2]
-            dout = layer_sizes[-1]
-            if init_means is not None and init_variances is None:
-                Wi_m_val = init_means[2][0]
-                bi_m_val = init_means[3][0]
-            else:
-                Wi_m_val = self.truncated_normal([din, dout], stddev=0.01)
-                bi_m_val = self.truncated_normal([dout], stddev=0.01)
-            Wi_v_val = self.constant(lvar_init, shape=[din, dout])
-            bi_v_val = self.constant(lvar_init, shape=[dout])
-
-            Wi_m = nn.Parameter(Wi_m_val)
-            bi_m = nn.Parameter(bi_m_val)
-            Wi_v = nn.Parameter(Wi_v_val)
-            bi_v = nn.Parameter(bi_v_val)
-
-            Wi_m_prior = torch.zeros(din, dout) + torch.tensor(prior_mean).view(1, 1)
-            bi_m_prior = torch.zeros(dout) + torch.tensor(prior_mean).view(-1)
-            Wi_v_prior = torch.zeros(din, dout) + torch.tensor(prior_var).view(1, 1)
-            bi_v_prior = torch.zeros(dout) + torch.tensor(prior_var).view(-1)
-
-            # Variatonal Parameters for current task
-            self.W_last_m.append(Wi_m)
-            self.b_last_m.append(bi_m)
-            self.W_last_v.append(Wi_v)
-            self.b_last_v.append(bi_v)
-            # Prior parameters for current task
-            self.prior_W_last_m.append(Wi_m_prior)
-            self.prior_b_last_m.append(bi_m_prior)
-            self.prior_W_last_v.append(Wi_v_prior)
-            self.prior_b_last_v.append(bi_v_prior)
-
-        # Zipping Everything (current posterior parameters) into single entity (self.weights) 
-        means = [self.W_m, self.b_m, self.W_last_m, self.b_last_m]
-        logvars = [self.W_v, self.b_v, self.W_last_v, self.b_last_v]
-        self.size = layer_sizes
-        self.weights = [means, logvars]
-
-    # Done 
     def extend_tensor(self, tensor, dims=None, extend_with=0.0):
         if (dims is None):
             return tensor
@@ -763,13 +615,14 @@ class IBP_BNN(nn.Module):
         if (self.isConv and len(mean.shape) == 4):
             cin, cout, W, H = mean.shape
             device = self.device
-            return (torch.randn(sample_size, cin, cout, W, H).to(device) * ((0.5 * logvar).exp().unsqueeze(0)) * (
-                        0 * (not self.use_normal_model)) + mean.unsqueeze(0))  # samples xN x M
+            sample = mean.unsqueeze(0) + \
+                     torch.randn(sample_size, cin, cout, W, H).to(device) * ((0.5 * logvar).exp().unsqueeze(0))
+            return sample  # samples xN x M
         else:
             N, M = mean.shape
             device = self.device
             return (torch.randn(sample_size, N, M).to(device) * ((0.5 * logvar).exp().unsqueeze(0)) * (
-                        0 * (not self.use_normal_model)) + mean.unsqueeze(0))  # samples xN x M
+                    0 * (not self.use_normal_model)) + mean.unsqueeze(0))  # samples xN x M
 
     # Done
     def Linear(self, input, layer, no_samples=1, const_mask=False, temp=0.1, task_id=None):
@@ -814,7 +667,7 @@ class IBP_BNN(nn.Module):
 
         _, din, dout = weights.shape
 
-        # Sampling mask or bernoulli random varible
+        # Sampling mask or bernoulli random variable
         if (layer < len(self.W_m)):
             if const_mask:
                 with torch.no_grad():
@@ -879,14 +732,10 @@ class IBP_BNN(nn.Module):
         weight_mean, weight_logvar, bias_mean, bias_logvar = params
         if (self.gauss_rep):
             weights = self.sample_gauss(weight_mean, weight_logvar, no_samples)  # sample_size x Din x Dout
-            biass = self.sample_gauss(bias_mean.unsqueeze(0), bias_logvar.unsqueeze(0),
-                                      no_samples)  # sample_size x 1 x Dout
+            biass = self.sample_gauss(bias_mean.unsqueeze(0), bias_logvar.unsqueeze(0), no_samples)
         else:
             weights = weight_mean.unsqueeze(0)
             biass = bias_mean.unsqueeze(0)
-
-        # weights = weights*0 + weight_mean.unsqueeze(0)
-        # biass = biass*0 + bias_mean.unsqueeze(0)
 
         S_, cin, cout, K1, K2 = weights.shape
         # Sampling mask or bernoulli random varible
@@ -909,27 +758,12 @@ class IBP_BNN(nn.Module):
             weight = weights  # weights
             bias = biass  # bias
         try:
-            # ret = []
-            # for sam in range(S_):
-            #     x_s = x[:,sam]
-            #     w_s = weight[sam].permute(1,0,2,3)
-            #     b_s = bias[sam]
-            #     ret.append((F.max_pool2d(F.relu(F.conv2d(x_s, weight = w_s, stride = 2, padding = 1)), 2) + b_s).unsqueeze(1))
-
-            # ret = torch.cat(ret, dim = 1)
-            # print(ret.shape)
             x = x.contiguous().view(N_i, -1, W_i, H_i)
             wghts = weight.permute(0, 2, 1, 3, 4).contiguous().view(cout * S_, cin, K1, K2)
             ret = F.conv2d(x, weight=wghts, stride=self.strides[layer], padding=self.paddings[layer], groups=S_)
             assert len(ret.shape) == 4
-            # N, C, W, H = ret.shape
-            # if(not const_mask):
-            #     ret = F.dropout(ret, 0.2)
-            # print(ret.shape)
+
             ret = F.max_pool2d(ret, self.poolings[layer])
-            # print(ret.shape)
-            # if(self.debug_mode):
-            #     print(x.shape, wghts.shape,ret.shape)
             N_i, Scout, W, H = ret.shape
             ret = ret.contiguous().view(N_i, S_, -1, W, H) + bias.permute(1, 0, 2, 3, 4)
             if (not const_mask):
@@ -1085,13 +919,15 @@ class IBP_BNN(nn.Module):
         vs = self.v_post_distr(l, shape=[no_samples,
                                          din])  # Independently sampling current layer IBP posterior : K x din x dout
         pis = torch.cumprod(vs, dim=2)  # Calcuting Pi's using nu's (IBP prior log probabilities): K x din x dout
-        method = 0
+        method = 2
         if (method == 0):
             logit_post = self._p_bers[l].unsqueeze(0) + self.logit(
                 pis)  # Varaitonal posterior log_alpha: K x din x dout
         elif (method == 1):
             logit_post = self._p_bers[l].unsqueeze(0) + torch.log(
                 pis + 10e-8)  # - torch.log(pis*(self._p_bers[l].unsqueeze(0).exp()-1)+1)
+        elif (method == 2):
+            logit_post = self.logit(pis)
         bs = self.reparam_bernoulli(logit_post, no_samples, self.reparam_mode,
                                     temp=temp)  # Reparameterized bernoulli samples: K x din x dout
         # print(bs.shape)
@@ -1136,9 +972,6 @@ class IBP_BNN(nn.Module):
                 self.training_size) * mul  # IBP KL Divergences
             self.acc_fix = (y.argmax(dim=-1) == F.softmax(pred_fix, dim=-1).mean(1).argmax(dim=-1)).float().mean()
             return self.cost_fix, self.cost1, self.cost2_fix, self.cost3, self.acc_fix
-        if (abs(self.cost) > 10e7):
-            print(self.cost, self.cost1, self.cost2, self.cost3)
-            assert 1 == 2
 
     # Done
     def _KL_term(self):
@@ -1167,9 +1000,6 @@ class IBP_BNN(nn.Module):
                     kl_mask = self.kl_mask[i]
                     kl_mask_b = torch.max(self.kl_mask[i], 0)[0]
 
-                    din_old, dout_old = kl_mask.shape
-                    # print(din, dout, din_old, dout_old)
-
                     # kl_mask = self.extend_tensor(kl_mask, [din-din_old, dout-dout_old]).to(self.device).view(self.W_m[i].shape[:2])
                     # kl_mask_b = self.extend_tensor(kl_mask_b, [dout-dout_old]).to(self.device).view(self.b_m[i].shape[:1])
 
@@ -1184,68 +1014,31 @@ class IBP_BNN(nn.Module):
                 kl_mask_b = torch.tensor(1.0).to(self.device)
 
             if (self.use_uniform_prior):
-                # print(i, len(self.W_m), kl_mask.shape, self.W_m[i].shape)
                 m, v = self.W_m[i] * kl_mask, self.W_v[i] * kl_mask + (
-                            1.0 - kl_mask) * self.prior_var.log().item()  # Taking Means and logVariaces of parameters
+                        1.0 - kl_mask) * self.prior_var.log().item()  # Taking Means and logVariaces of parameters
             else:
                 m, v = self.W_m[i], self.W_v[i]  # Taking Means and logVariaces of parameters
-            # print("Debug ", self.prior_W_m[i].shape, self.prior_W_v[i].shape, kl_mask.shape, self.prior_var)
             m0, v0 = self.prior_W_m[i] * kl_mask, self.prior_W_v[i] * kl_mask + (
-                        1.0 - kl_mask) * self.prior_var.item()  # Prior mean and variance
-            # print("Layer ", i, "Shapes", m0.shape, v0.shape)
-            # print(v,v0)
+                    1.0 - kl_mask) * self.prior_var.item()  # Prior mean and variance
+
             const_term = -0.5 * (torch.prod(torch.tensor(v0.shape)))
             log_std_diff = 0.5 * torch.sum((v0.log() - v))
             mu_diff_term = 0.5 * torch.sum(((v.exp() + (m0 - m) ** 2) / v0))
-            # print(din, dout, v0.shape)
-            # print(const_term + log_std_diff + mu_diff_term, log_std_diff, mu_diff_term, (v.exp()/v0 - 1).sum(), const_term)
-            # assert False
-            # Adding the current KL Divergence
             kl.append(const_term + log_std_diff + mu_diff_term)
-            m = None;
-            v = None;
-            m0 = None;
-            v0 = None
+
             # Calculating KL Divergence for non output layer biases
             if (self.use_uniform_prior):
                 m, v = self.b_m[i] * kl_mask_b, self.b_v[i] * kl_mask_b + (
-                            1.0 - kl_mask_b) * self.prior_var.log().item()  # Taking Means and logVariaces of parameters
+                        1.0 - kl_mask_b) * self.prior_var.log().item()  # Taking Means and logVariaces of parameters
             else:
                 m, v = self.b_m[i], self.b_v[i]
             m0, v0 = self.prior_b_m[i] * kl_mask_b, self.prior_b_v[i] * kl_mask_b + (
-                        1.0 - kl_mask_b) * self.prior_var.item()
+                    1.0 - kl_mask_b) * self.prior_var.item()
             const_term = -0.5 * (torch.prod(torch.tensor(v0.shape)))
             log_std_diff = 0.5 * torch.sum((v0).log() - v)
             mu_diff_term = 0.5 * torch.sum((v.exp() + (m0 - m) ** 2) / (v0))
-            # print(din, dout, v0.shape, v.shape)
-            # print(const_term + log_std_diff + mu_diff_term, log_std_diff, mu_diff_term, (v.exp()/v0 - 1).sum(), const_term)
-            # assert False
-            # if(const_term + log_std_diff + mu_diff_term != const_term + log_std_diff + mu_diff_term):
-            #     print("error", const_term, log_std_diff, mu_diff_term)
-            #     assert 1==2
-            # Adding the current KL Divergence
             kl.append(const_term + log_std_diff + mu_diff_term)
 
-        # Calculating KL Divergence for output layer weights
-        # no_tasks = len(self.W_last_m)
-        # din = self.size[-2]
-        # dout = self.size[-1]
-        # print(kl)
-        # for i in range(no_tasks):
-        #     # Last Layer weights
-        #     m, v = self.W_last_m[i], self.W_last_v[i]
-        #     m0, v0 = (self.prior_W_last_m[i]).to(self.device), (self.prior_W_last_v[i]).to(self.device)
-        #     const_term = -0.5 * dout * din
-        #     log_std_diff = 0.5 * torch.sum(v0.log() - v)
-        #     mu_diff_term = 0.5 * torch.sum((v.exp() + (m0 - m)**2) / v0)
-        #     kl.append(const_term + log_std_diff + mu_diff_term)
-        #     # Last layer Biases
-        #     m, v = self.b_last_m[i], self.b_last_v[i]
-        #     m0, v0 = (self.prior_b_last_m[i]).to(self.device), (self.prior_b_last_v[i]).to(self.device)
-        #     const_term = -0.5 * dout
-        #     log_std_diff = 0.5 * torch.sum(v0.log() - v)
-        #     mu_diff_term = 0.5 * torch.sum((v.exp() + (m0 - m)**2) / v0)
-        #     kl.append(const_term + log_std_diff + mu_diff_term)
         return sum(kl)
 
     # Done
@@ -1395,38 +1188,6 @@ class IBP_BNN(nn.Module):
             # Optimizer for training fixed mask model.
             opt_fix = Adam(self.parameters(), lr=max(min([p['lr'] for p in self.optimizer.param_groups]), 0.0001))
             return opt_fix
-
-    # Done
-    def prediction(self, x_test, task_idx, const_mask):
-        # Test model
-        if const_mask:
-            prediction = self._prediction(inputs, task_idx, self.no_train_samples, True)
-        else:
-            prediction = self._prediction(inputs, task_idx,
-                                          self.no_train_samples)  # Predicitons for given input and task id : N x K x O
-        return prediction
-
-    # Done
-    def accuracy(self, x_test, y_test, task_id, batch_size=1000):
-        '''Prints the accuracy of the model for a given input output pairs'''
-        N = x_test.shape[0]
-        if batch_size > N:
-            batch_size = N
-
-        costs = []
-        cur_x_test = x_test
-        cur_y_test = y_test
-        total_batch = int(np.ceil(N * 1.0 / batch_size))
-
-        avg_acc = 0.
-        for i in range(total_batch):
-            start_ind = i * batch_size
-            end_ind = np.min([(i + 1) * batch_size, N])
-            batch_x = cur_x_test[start_ind:end_ind, :]
-            batch_y = cur_y_test[start_ind:end_ind, :]
-            acc = val_step(batch_x, batch_y, task_id, temp=0.1, fix=True)
-            avg_acc += acc / total_batch
-        print(avg_acc)
 
     # Done
     def prediction_prob(self, x_test, task_idx, batch_size=100):
