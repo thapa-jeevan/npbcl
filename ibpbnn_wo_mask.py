@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from scipy.special import beta as BETA
@@ -77,15 +78,12 @@ class IBP_BNN(nn.Module):
         # Parameter Initiliatlizations 
         self.intialize(alpha, beta, input_size, hidden_size, output_size, prev_means,
                        prev_log_variances, prior_mean, prior_var, prev_pber, re_mode)
-        # All the previously learned tasks boolean masks are to be stored.
-        self.prev_masks = nn.ParameterList([])
-        for l in range(self.no_layers - 1):
-            prev_mask_l_init = torch.tensor(prev_masks[l]) if prev_masks is not None else torch.zeros(max_tasks,
-                                                                                                      self.W_m[l].shape[
-                                                                                                          0],
-                                                                                                      self.W_m[l].shape[
-                                                                                                          1]).float()
-            self.prev_masks.append(nn.Parameter(prev_mask_l_init, requires_grad=False))
+        # # All the previously learned tasks boolean masks are to be stored.
+        # self.prev_masks = nn.ParameterList([])
+        # for l in range(self.no_layers - 1):
+        #     prev_mask_l_init = torch.tensor(prev_masks[l]) if prev_masks is not None else \
+        #         torch.zeros(max_tasks, self.W_m[l].shape[0], self.W_m[l].shape[1]).float()
+        #     self.prev_masks.append(nn.Parameter(prev_mask_l_init, requires_grad=False))
 
         # Initializing the session and optimizer for current model. 
         self.assign_optimizer(learning_rate)
@@ -534,16 +532,13 @@ class IBP_BNN(nn.Module):
 
         # Sampling mask or bernoulli random varible
         if (layer < len(self.size) - 2):
-            if const_mask:
-                with torch.no_grad():
-                    bs = self.prev_masks[layer][task_id]
-                    din_old, dout_old = bs.shape
-                    bs = self.extend_tensor(bs, [din - din_old, dout - dout_old]).unsqueeze(0).to(self.device)
+            if isinstance(temp, float):
+                temp = torch.Tensor([temp]).cuda()
             else:
                 temp = temp[layer]
-                vs, bs, logit_post = self.ibp_sample(layer, no_samples, temp=temp)  # Sampling through IBP
-                self.KL_B.append(self._KL_B(layer, vs, bs, logit_post,
-                                            temp=temp))  # Calcuting KL divergence between prior and posterior
+            vs, bs, logit_post = self.ibp_sample(layer, no_samples, temp=temp)  # Sampling through IBP
+            self.KL_B.append(self._KL_B(layer, vs, bs, logit_post,
+                                        temp=temp))  # Calcuting KL divergence between prior and posterior
             # Generating masked weights and biases for current layer
             weight = weights * bs  # weights * ibp_mask
             bias = biass * (bs.max(dim=1)[0].unsqueeze(1))  # bias * ibp_mask
@@ -622,13 +617,15 @@ class IBP_BNN(nn.Module):
         vs = self.v_post_distr(l, shape=[no_samples,
                                          din])  # Independently sampling current layer IBP posterior : K x din x dout
         pis = torch.cumprod(vs, dim=2)  # Calcuting Pi's using nu's (IBP prior log probabilities): K x din x dout
-        method = 1
+        method = 2
         if (method == 0):
             logit_post = self._p_bers[l].unsqueeze(0) + self.logit(
                 pis)  # Varaitonal posterior log_alpha: K x din x dout
         elif (method == 1):
             logit_post = self._p_bers[l].unsqueeze(0) + torch.log(
                 pis + 10e-8)  # - torch.log(pis*(self._p_bers[l].unsqueeze(0).exp()-1)+1)
+        elif (method == 2):
+            logit_post = self.logit(pis)
 
         bs = self.reparam_bernoulli(logit_post, no_samples, self.reparam_mode,
                                     temp=temp)  # Reparameterized bernoulli samples: K x din x dout
@@ -708,7 +705,7 @@ class IBP_BNN(nn.Module):
                 else:
                     m, v = self.W_m[i], self.W_v[i]  # Taking Means and logVariaces of parameters
                 m0, v0 = (self.prior_W_m[i].to(self.device) * kl_mask), (self.prior_W_v[i].to(self.device) * kl_mask + (
-                            1.0 * (1 - kl_mask) * self.prior_var.to(self.device)))  # Prior mean and variance
+                        1.0 * (1 - kl_mask) * self.prior_var.to(self.device)))  # Prior mean and variance
             except:
                 print(din, dout, din_old, dout_old, self.W_m[i].shape)
             # print(v,v0)
@@ -724,7 +721,7 @@ class IBP_BNN(nn.Module):
             else:
                 m, v = self.b_m[i], self.b_v[i]
             m0, v0 = (self.prior_b_m[i].to(self.device) * kl_mask_b), (self.prior_b_v[i].to(self.device) * kl_mask_b + (
-                        1.0 * (1 - kl_mask_b) * self.prior_var.to(self.device)))
+                    1.0 * (1 - kl_mask_b) * self.prior_var.to(self.device)))
             const_term = -0.5 * dout
             log_std_diff = 0.5 * torch.sum((v0).log() - v)
             mu_diff_term = 0.5 * torch.sum((v.exp() + (m0 - m) ** 2) / (v0))
@@ -934,8 +931,7 @@ class IBP_BNN(nn.Module):
                 start_ind = i * batch_size
                 end_ind = np.min([(i + 1) * batch_size, N])
                 batch_x = torch.tensor(cur_x_test[start_ind:end_ind, :]).float().to(self.device)
-                pred_const_mask = self._prediction(batch_x, task_idx, self.no_pred_samples, const_mask=True,
-                                                   temp=self.min_temp)
+                pred_const_mask = self._prediction(batch_x, task_idx, self.no_pred_samples, temp=self.min_temp)
 
                 pred = F.softmax(pred_const_mask, dim=-1).cpu().detach().numpy()
                 prob.append(pred)
@@ -956,15 +952,13 @@ class IBP_BNN(nn.Module):
     # Done
     def get_IBP(self):
         # Returns the current masks and IBP params of the model.
-        prev_masks = [[m.cpu().detach().numpy() for m in layer] for layer in self.prev_masks]
-
         alphas = [self.softplus(m).cpu().detach().numpy() for m in self._concs1]
         betas = [self.softplus(m).cpu().detach().numpy() for m in self._concs2]
         for i in range(len(alphas)):
             alphas[i] = max(max(alphas[i]), max(self.alphas[i].cpu().detach().numpy()))
             betas[i] = 1.0
         print("IBP prior alpha :", alphas)
-        ret = [prev_masks, alphas, betas]
+        ret = [None, alphas, betas]
         return ret
 
     # Done
@@ -1137,55 +1131,6 @@ class IBP_BNN(nn.Module):
                           "{:.4f}".format(acc))
                     print("Temperature :", [tmp.mean() for tmp in temp])
                 costs.append(avg_cost)
-
-            # Saving the learned mask
-            # masks = self.sample_fix_masks(no_samples=self.no_pred_samples, temp=temp)
-            # for l in range(self.no_layers - 1):
-            #     self.prev_masks[l][task_idx] = torch.round(masks[l]).detach()
-
-        self.optimizer = self.get_optimizer(self.learning_rate, True)
-        # Selective Retraining after learning the masks and fixing them
-        temp = self.min_temp
-
-        print("Selective Retraining")
-
-        if (val_size == 0):
-            batch_size = 50
-        # Running for small number of epochs(10).
-        for epoch2 in range(num_sel_epochs):
-            perm_inds = np.arange(x_train.shape[0] - val_size)
-            np.random.shuffle(perm_inds)
-            cur_x_train = x_train[perm_inds]
-            cur_y_train = y_train[perm_inds]
-            avg_cost = 0
-            avg_cost1 = 0.
-            avg_cost2 = 0.
-            avg_acc = 0.
-            avg_cost3 = 0.
-            total_batch = int(np.ceil(N * 1.0 / batch_size))
-            for i in range(total_batch):
-                start_ind = i * batch_size
-                end_ind = np.min([(i + 1) * batch_size, N])
-                batch_x = torch.tensor(cur_x_train[start_ind:end_ind, :]).float().to(self.device)
-                batch_y = torch.tensor(cur_y_train[start_ind:end_ind, :]).float().to(self.device)
-
-                c, c1, c2, c3 = self.train_step_all(batch_x, batch_y, task_idx, temp, fix=True)
-
-                avg_cost += c / total_batch
-                avg_cost1 += c1 / total_batch
-                avg_cost2 += c2 / total_batch
-                avg_cost3 += c3 / total_batch
-            if (val_size != 0):
-                vc, acc = self.val_step(cur_x_val, cur_y_val, task_idx, temp, fix=True)
-
-            if epoch2 % display_epoch2 == 0:
-                print("Epoch:", '%04d' % (epoch + epoch2 + 1), "cost=", \
-                      "{:.4f}".format(avg_cost), "cost2=", \
-                      "{:.4f}".format(avg_cost1), "cost3=", \
-                      "{:.4f}".format(avg_cost2), "cost4=", \
-                      "{:.4f}".format(avg_cost3), "cost_val=", \
-                      "{:.4f}".format(vc), "acc_val=", \
-                      "{:.4f}".format(acc))
 
         print("Optimization Finished!")
         return costs
