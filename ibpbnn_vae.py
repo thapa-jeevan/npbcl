@@ -606,13 +606,6 @@ class IBP_BAE(nn.Module):
         lsizes = self.size
         iterto = len(lsizes) - 1
         for i in range(self.z_index):
-
-            '''
-            if(i < iterto-1):
-                x = torch.mm(x, self.W_m[i]) + self.b_m[i]
-            else:
-                x = torch.mm(x, self.W_last_m[task_id]) + self.b_last_m[task_id] 
-            '''
             x = self.Linear(x, layer=i, no_samples=no_samples, const_mask=const_mask, temp=temp, task_id=task_id)
             if (i < self.z_index - 1):
                 if (activations is not None):
@@ -639,15 +632,7 @@ class IBP_BAE(nn.Module):
         lsizes = self.size
         iterto = len(lsizes) - 1
         for i in range(self.z_index, iterto):
-
-            '''
-            if(i < iterto-1):
-                x = torch.mm(x, self.W_m[i]) + self.b_m[i]
-            else:
-                x = torch.mm(x, self.W_last_m[task_id]) + self.b_last_m[task_id] 
-            '''
             if (i < iterto - 1):
-
                 x = self.Linear(x, layer=i, no_samples=no_samples, const_mask=const_mask, temp=temp, task_id=task_id)
 
                 if (activations is not None):
